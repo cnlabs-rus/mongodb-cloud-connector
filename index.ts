@@ -1,4 +1,4 @@
-import {MongoClient, MongoClientOptions} from 'mongodb';
+import {Db, MongoClient, MongoClientOptions} from 'mongodb';
 
 function resolveUrl(dbName: string) {
     if (process.env.VCAP_SERVICES) {
@@ -27,7 +27,7 @@ let defaultMongoOptions = {
     useNewUrlParser: true
 };
 
-let cachedDB: { [id: string] : MongoClient; } = {};
+let cachedDB: { [id: string] : Db; } = {};
 
 export const clearCache = () => cachedDB = {};
 
@@ -35,8 +35,8 @@ export const db = async (dbName: string = 'default', options?: MongoClientOption
     console.log(cachedDB);
     if (!cachedDB[dbName]) {
         return MongoClient.connect(resolveUrl(dbName), {...defaultMongoOptions, ...options}).then(database => {
-            cachedDB[dbName] = database;
-            return database;
+            cachedDB[dbName] = database.db();
+            return cachedDB[dbName];
         });
     }
     return Promise.resolve(cachedDB[dbName]);
