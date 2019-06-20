@@ -187,7 +187,7 @@ describe("tests", () => {
         const first = await db("mng3", {appname: "XXX"});
         const second = await db("mng3");
         expect(first).toEqual({"i'm": 'database1'});
-        expect(second).toEqual({"i'm": 'database1..5.'});
+        expect(second).toEqual({"i'm": 'database1'});
     });
 
     test("return cached instance by name", async () => {
