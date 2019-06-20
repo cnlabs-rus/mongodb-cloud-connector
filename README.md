@@ -18,7 +18,7 @@ For example use with express web server
        import { db } from '@cnlabs/mongodb-cloud-connector';
 
        app.get("/foo", async (req, res) => {
-           const bars = db().collection('bar').find({}).toArray()
+           const bars = await (await db()).collection('bar').find({}).toArray()
            res.send( { bars } )
        });
  
