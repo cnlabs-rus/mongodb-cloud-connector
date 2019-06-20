@@ -1,0 +1,28 @@
+{
+  "name": "mongodb-cloud-connector",
+  "version": "1.0.0",
+  "description": "This is MongoDB connector in cloud or local environment(Cloud Foundry)",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --outDir ./dist index.ts"
+  },
+  "keywords": [
+    "cloud",
+    "cloud-foundry",
+    "mongo",
+    "mongodb"
+  ],
+  "author": "Igor E. Mikhaylyuk <migger@yandex.ru>",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@types/mongodb": "^3.1.28",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.2"
+  }
+}
