@@ -1,6 +1,6 @@
 {
   "name": "@cnlabs/mongodb-cloud-connector",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "This is MongoDB connector in cloud or local environment(Cloud Foundry)",
   "main": "lib/index.js",
   "types": "lib/index.d.js",
@@ -30,6 +30,7 @@
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.2"
   },
+  "repository": "git@github.com:cnlabs-rus/mongodb-cloud-connector.git",
   "files": [
     "lib/**/*"
   ]
