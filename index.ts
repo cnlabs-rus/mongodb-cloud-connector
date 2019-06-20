@@ -3,14 +3,14 @@ import {MongoClient, MongoClientOptions} from 'mongodb';
 function resolveUrl(dbName: string) {
     if (process.env.VCAP_SERVICES) {
         const parsed = JSON.parse(process.env.VCAP_SERVICES);
-        if(!parsed.mongodb) {
+        if (!parsed.mongodb) {
             throw new Error(`Cannot find mongo service '${dbName}'`)
         }
-        if(dbName === 'default') {
+        if (dbName === 'default') {
             return parsed.mongodb[0].credentials.uri
         }
-        let filtered = parsed.mongodb.filter(s => s.name == dbName);
-        if(!filtered.length) {
+        let filtered = parsed.mongodb.filter((s: any) => s.name == dbName);
+        if (!filtered.length) {
             throw new Error(`Cannot find mongo service '${dbName}'`)
         }
         return filtered[0].credentials.uri
@@ -27,13 +27,13 @@ let defaultMongoOptions = {
     useNewUrlParser: true
 };
 
-let cachedDB = {};
+let cachedDB: { [id: string] : MongoClient; } = {};
 
 export const clearCache = () => cachedDB = {};
 
 export const db = async (dbName: string = 'default', options?: MongoClientOptions) => {
     console.log(cachedDB);
-    if(!cachedDB[dbName]) {
+    if (!cachedDB[dbName]) {
         return MongoClient.connect(resolveUrl(dbName), {...defaultMongoOptions, ...options}).then(database => {
             cachedDB[dbName] = database;
             return database;

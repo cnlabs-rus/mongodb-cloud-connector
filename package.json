@@ -2,10 +2,15 @@
   "name": "mongodb-cloud-connector",
   "version": "1.0.0",
   "description": "This is MongoDB connector in cloud or local environment(Cloud Foundry)",
-  "main": "index.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc --outDir ./dist index.ts"
+    "build": "tsc",
+    "prepare" : "npm run build",
+    "prepublishOnly" : "npm test",
+    "version" : "git add -A .",
+    "postversion" : "git push && git push --tags"
   },
   "keywords": [
     "cloud",
@@ -24,5 +29,8 @@
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.2"
-  }
+  },
+  "files": [
+    "lib/**/*"
+  ]
 }
