@@ -26,6 +26,21 @@ describe("tests", () => {
         }]])
     });
 
+    test('CLEAN_ENV: remove replica set locally', async () => {
+        const expectedDatabase = {
+            db: () => {
+                return {"i'm": 'database'}
+            }
+        };
+        (MongoClient.connect as jest.Mock).mockResolvedValue(expectedDatabase);
+        expect(await db("default", {replicaSet: "rs0"})).toEqual({"i'm": 'database'});
+        expect((MongoClient.connect as jest.Mock).mock.calls).toEqual([["mongodb://localhost:27017/default", {
+            poolSize: 10,
+            autoReconnect: true,
+            useNewUrlParser: true
+        }]])
+    });
+
     test('CLEAN_ENV: named database', async () => {
         const expectedDatabase = {
             db: () => {
@@ -88,6 +103,22 @@ describe("tests", () => {
         }]])
     });
 
+    test('ENV_VARIABLE: remove replicaSet', async () => {
+        process.env.MONGODB_URL = 'AAAAA';
+        const expectedDatabase = {
+            db: () => {
+                return {"i'm": 'database'}
+            }
+        };
+        (MongoClient.connect as jest.Mock).mockResolvedValue(expectedDatabase);
+        expect(await db("default", {replicaSet: "rs0"})).toEqual({"i'm": 'database'});
+        expect((MongoClient.connect as jest.Mock).mock.calls).toEqual([["AAAAA/default", {
+            poolSize: 10,
+            autoReconnect: true,
+            useNewUrlParser: true
+        }]])
+    });
+
     test('ENV_VARIABLE: named', async () => {
         process.env.MONGODB_URL = 'AAAAA';
         const expectedDatabase = {
@@ -114,6 +145,23 @@ describe("tests", () => {
         (MongoClient.connect as jest.Mock).mockResolvedValue(expectedDatabase);
         expect(await db()).toEqual({"i'm": 'database'});
         expect((MongoClient.connect as jest.Mock).mock.calls).toEqual([["CLOUD_URI", {
+            poolSize: 10,
+            autoReconnect: true,
+            useNewUrlParser: true
+        }]])
+    });
+
+    test('CLOUD_FOUNDRY: default do not remove replicaSet', async () => {
+        process.env.VCAP_SERVICES = '{"mongodb":[{"credentials":{"uri":"CLOUD_URI"},"name":"mng1"}]}';
+        const expectedDatabase = {
+            db: () => {
+                return {"i'm": 'database'}
+            }
+        };
+        (MongoClient.connect as jest.Mock).mockResolvedValue(expectedDatabase);
+        expect(await db("default", {replicaSet: "rs0"})).toEqual({"i'm": 'database'});
+        expect((MongoClient.connect as jest.Mock).mock.calls).toEqual([["CLOUD_URI", {
+            replicaSet: "rs0",
             poolSize: 10,
             autoReconnect: true,
             useNewUrlParser: true

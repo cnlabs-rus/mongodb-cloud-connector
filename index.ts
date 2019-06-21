@@ -32,7 +32,9 @@ let cachedDB: { [id: string] : Db; } = {};
 export const clearCache = () => cachedDB = {};
 
 export const db = async (dbName: string = 'default', options?: MongoClientOptions) => {
-    console.log(cachedDB);
+    if(!process.env.VCAP_SERVICES && options) {
+        delete options.replicaSet;
+    }
     if (!cachedDB[dbName]) {
         return MongoClient.connect(resolveUrl(dbName), {...defaultMongoOptions, ...options}).then(database => {
             cachedDB[dbName] = database.db();
